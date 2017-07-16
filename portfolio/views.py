@@ -19,9 +19,7 @@ def home(request):
 @login_required
 def customer_list(request):
    customer = Customer.objects.filter(created_date__lte=timezone.now())
-   return render(request, 'portfolio/customer_list.html',
-                 {'customers': customer})
-
+   return render(request, 'portfolio/customer_list.html', {'customers': customer})
 
 @login_required
 def customer_edit(request, pk):
@@ -111,7 +109,7 @@ def investment_new(request):
            investment = form.save(commit=False)
            investment.created_date = timezone.now()
            investment.save()
-           investments = Investment.objects.filter(purchase_date__lte=timezone.now())
+           investments = Investment.objects.filter(acquired_date__lte=timezone.now())
            return render(request, 'portfolio/investment_list.html',
                          {'investments': investments})
    else:
@@ -129,19 +127,19 @@ def investment_edit(request, pk):
            # stock.customer = stock.id
            investment.updated_date = timezone.now()
            investment.save()
-           investments = Investment.objects.filter(purchase_date__lte=timezone.now())
+           investments = Investment.objects.filter(acquired_date__lte=timezone.now())
            return render(request, 'portfolio/investment_list.html', {'investments': investments})
    else:
        # print("else")
-       form = InvestmentForm(instance=stock)
+       form = InvestmentForm(instance=investment)
    return render(request, 'portfolio/investment_edit.html', {'form': form})
 
 @login_required
 def investment_delete(request, pk):
     investment = get_object_or_404(Investment, pk=pk)
     investment.delete()
-    investments = Investment.objects.filter(purchase_date__lte=timezone.now())
-    return render(request, 'portfolio/investment_list.hrml', {'investments': investments})
+    investments = Investment.objects.filter(acquired_date__lte=timezone.now())
+    return render(request, 'portfolio/investment_list.html', {'investments': investments})
 
 @login_required
 def portfolio(request,pk):
