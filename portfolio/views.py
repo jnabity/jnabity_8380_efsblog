@@ -18,8 +18,24 @@ def home(request):
 
 @login_required
 def customer_list(request):
-   customer = Customer.objects.filter(created_date__lte=timezone.now())
-   return render(request, 'portfolio/customer_list.html', {'customers': customer})
+   customers = Customer.objects.filter(created_date__lte=timezone.now())
+   return render(request, 'portfolio/customer_list.html', {'customers': customers})
+
+@login_required
+def customer_new(request):
+   if request.method == "POST":
+       form = CustomerForm(request.POST)
+       if form.is_valid():
+           customer = form.save(commit=False)
+           customer.created_date = timezone.now()
+           customer.save()
+           customers = Customer.objects.filter(created_date__lte=timezone.now())
+           return render(request, 'portfolio/customer_list.html',
+                         {'customers': customers})
+   else:
+       form = StockForm()
+       # print("Else")
+   return render(request, 'portfolio/stock_new.html', {'form': form})
 
 @login_required
 def customer_edit(request, pk):
@@ -31,9 +47,9 @@ def customer_edit(request, pk):
            customer = form.save(commit=False)
            customer.updated_date = timezone.now()
            customer.save()
-           customer = Customer.objects.filter(created_date__lte=timezone.now())
+           customers = Customer.objects.filter(created_date__lte=timezone.now())
            return render(request, 'portfolio/customer_list.html',
-                         {'customers': customer})
+                         {'customers': customers})
    else:
        # edit
        form = CustomerForm(instance=customer)
@@ -44,7 +60,8 @@ def customer_edit(request, pk):
 def customer_delete(request, pk):
    customer = get_object_or_404(Customer, pk=pk)
    customer.delete()
-   return redirect('portfolio:customer_list')
+   customers = Customer.objects.filter(created_date__lte=timezone.now())
+   return redirect(request, 'portfolio/customer_list.html', {'customers': customers})
 
 
 @login_required
