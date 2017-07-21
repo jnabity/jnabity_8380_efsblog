@@ -23,9 +23,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'l12nsr8$y7-3)r--w9yygupy^()qnz=t%oram7xsa&^uj06h=q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+DEBUG = True
 
 
 # Application definition
@@ -78,8 +80,12 @@ WSGI_APPLICATION = 'efsblog.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'd293dom0oc6q59',
+        'USER': 'jwzecqcmhjblsn',
+        'PASSWORD': '089679fb6afb473f8d8043e633d50ff0c0e2e099946991a231fe6901e2094f0a',
+        'HOST': 'ec2-23-23-222-147.compute-1.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
@@ -121,3 +127,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
