@@ -33,9 +33,9 @@ def customer_new(request):
            return render(request, 'portfolio/customer_list.html',
                          {'customers': customers})
    else:
-       form = StockForm()
+       form = CustomerForm()
        # print("Else")
-   return render(request, 'portfolio/stock_new.html', {'form': form})
+   return render(request, 'portfolio/customer_new.html', {'form': form})
 
 @login_required
 def customer_edit(request, pk):
@@ -61,7 +61,7 @@ def customer_delete(request, pk):
    customer = get_object_or_404(Customer, pk=pk)
    customer.delete()
    customers = Customer.objects.filter(created_date__lte=timezone.now())
-   return redirect(request, 'portfolio/customer_list.html', {'customers': customers})
+   return render(request, 'portfolio/customer_list.html', {'customers': customers})
 
 
 @login_required
@@ -138,7 +138,7 @@ def investment_new(request):
 def investment_edit(request, pk):
    investment = get_object_or_404(Investment, pk=pk)
    if request.method == "POST":
-       form = InvestmentForm(request.POST, instance=stock)
+       form = InvestmentForm(request.POST, instance=investment)
        if form.is_valid():
            investment = form.save()
            # stock.customer = stock.id
