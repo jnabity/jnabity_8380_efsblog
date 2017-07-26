@@ -82,10 +82,10 @@ WSGI_APPLICATION = 'efsblog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'df46fk6af6k0sl',
-        'USER': 'hhnkrqiezypudf',
-        'PASSWORD': '22d66801f3a4b0fd00afe4f3de6ce8f6025aeb66855e72d1565124073a5dcaae',
-        'HOST': 'ec2-54-83-49-44.compute-1.amazonaws.com',
+        'NAME': 'dfsvm36svne0h9',
+        'USER': 'bpaishljwmhkyw',
+        'PASSWORD': '76e04d7f692cab88d0090f633cd83c2311aef7d2c3c5243c7c550c53a077da5b',
+        'HOST': 'ec2-107-22-251-55.compute-1.amazonaws.com',
         'PORT': '5432',
     }
 }
