@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from yahoo_finance import Share
 
 
 # Create your models here.
@@ -75,3 +76,33 @@ class Stock(models.Model):
     def initial_stock_value(self):
         return self.shares * self.purchase_price
 
+    def current_stock_price(self):
+        symbol_f = self.symbol
+        data = Share(symbol_f)
+        share_value = (data.get_open())
+        return share_value
+
+    def current_stock_value(self):
+        symbol_f = self.symbol
+        data = Share(symbol_f)
+        share_value = (data.get_open())
+        return float(share_value) * float(self.shares)
+
+class MutualFund(models.Model):
+    customer = models.ForeignKey(Customer, related_name='mutualfund')
+    name = models.CharField(max_length=20)
+    shares = models.DecimalField (max_digits=10, decimal_places=1)
+    purchase_net_asset_value = models.DecimalField(max_digits=10, decimal_places=2)
+    purchase_date = models.DateField(default=timezone.now, blank=True, null=True)
+    recent_net_asset_value = models.DecimalField(max_digits=10, decimal_places=2)
+    recent_date = models.DateField(default=timezone.now, blank=True, null=True)
+
+    def created(self):
+        self.recent_date = timezone.now()
+        self.save()
+
+    def __str__(self):
+        return str(self.customer)
+
+    def initial_fund_value(self):
+        return self.shares * self.purchase_net_asset_value
